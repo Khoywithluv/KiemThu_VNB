@@ -479,7 +479,47 @@ class PriceValidationTest(unittest.TestCase):
             driver.quit()
 
 
+        # Mở trang chủ
+        driver.get("https://shopvnb.com/")
 
+        # Nhập từ khóa tìm kiếm với 0 ký tự
+        search_box = wait.until(EC.presence_of_element_located((By.NAME, "tu_khoa")))
+        search_box.clear()
+        search_box.send_keys("")  # Nhập từ khóa rỗng
 
+        # Nhấn nút "Tìm kiếm"
+        search_button = driver.find_element(By.CLASS_NAME, "btn.icon-fallback-text")
+        search_button.click()
+
+        # Kiểm tra hiển thị thông báo lỗi hoặc trạng thái không tìm thấy
+        try:
+            error_message = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".error-message")))
+            assert "nhập từ khóa tìm kiếm" in error_message.text.lower(), "Không tìm thấy thông báo lỗi phù hợp"
+            print("Kiểm tra tìm kiếm với từ khóa không hợp lệ: Thành công")
+        except Exception as e:
+            print(f"Kiểm tra tìm kiếm thất bại: {e}")
+
+    def test_tim_kiem_ky_tu_dac_biet(self, driver):
+        driver, wait = driver
+
+        # Mở trang chủ
+        driver.get("https://shopvnb.com/")
+
+        # Nhập từ khóa tìm kiếm với ký tự đặc biệt "%%%%"
+        search_box = wait.until(EC.presence_of_element_located((By.NAME, "tu_khoa")))
+        search_box.clear()
+        search_box.send_keys("%%%%")  # Nhập từ khóa không hợp lệ
+
+        # Nhấn nút "Tìm kiếm"
+        search_button = driver.find_element(By.CLASS_NAME, "btn.icon-fallback-text")
+        search_button.click()
+
+        # Kiểm tra kết quả trả về khi tìm kiếm không hợp lệ
+        try:
+            no_result_message = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".no-results-message")))
+            assert "không tìm thấy sản phẩm" in no_result_message.text.lower(), "Không tìm thấy thông báo kết quả phù hợp"
+            print("Kiểm tra tìm kiếm với ký tự đặc biệt: Thành công")
+        except Exception as e:
+            print(f"Kiểm tra tìm kiếm thất bại: {e}")
 
 
