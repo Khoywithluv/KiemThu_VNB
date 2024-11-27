@@ -478,6 +478,54 @@ class PriceValidationTest(unittest.TestCase):
             # Đóng trình duyệt
             driver.quit()
 
+class DatHangTester:
+    def test_dat_hang(self, driver):
+        driver, wait = driver
+
+        # Mở trang thanh toán
+        driver.get("https://shopvnb.com/gio-hang/thanh-toan")
+
+        # Điền thông tin người nhận hàng
+        wait.until(EC.presence_of_element_located((By.NAME, "name"))).send_keys("Nguyễn Ngọc Khôi")
+        driver.find_element(By.NAME, "phone").send_keys("0925480768")
+        driver.find_element(By.NAME, "address").send_keys("26/19/100 Lâm Hoành P. An Lạc Q. Bình Tân")
+        driver.find_element(By.NAME, "email").send_keys("ngockhoi10112003@gmail.com")
+
+        # Nhấn nút 'ĐẶT HÀNG'
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+
+        # Kiểm tra thông báo xác nhận đặt hàng thành công
+        confirmation_message = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".order-success-message")))
+        assert "đặt hàng thành công" in confirmation_message.text.lower(), "Đặt hàng không thành công hoặc không có thông báo"
+
+        print("Kiểm tra đặt hàng: Thành công")
+
+        def test_sai(self, driver):
+            driver, wait = driver
+
+            # Mở trang thanh toán
+            driver.get("https://shopvnb.com/gio-hang/thanh-toan")
+
+            # Điền thông tin người nhận hàng
+            wait.until(EC.presence_of_element_located((By.NAME, "name"))).send_keys("Nguyễn Ngọc Khôi")
+            driver.find_element(By.NAME, "phone").send_keys("09254807689")
+            driver.find_element(By.NAME, "address").send_keys("26/19/100 Lâm Hoành P. An Lạc Q. Bình Tân")
+            driver.find_element(By.NAME, "email").send_keys("ngockhoi10112003@gmail.com")
+
+            # Nhấn nút 'ĐẶT HÀNG'
+            driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+
+            # Kiểm tra thông báo xác nhận đặt hàng thành công
+            confirmation_message = wait.until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, ".order-success-message")))
+            assert "đặt hàng thành công" in confirmation_message.text.lower(), "Đặt hàng không thành công hoặc không có thông báo"
+
+            print("Kiểm tra đặt hàng: Thành công")
+
+class TestShopVNSearch:
+
+    def test_tim_kiem_khong_hop_le(self, driver):
+        driver, wait = driver
 
         # Mở trang chủ
         driver.get("https://shopvnb.com/")
